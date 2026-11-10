@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-gray-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHADOW - Fashion Store</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        shadowDark: '#121212',
+                        shadowAccent: '#2563eb',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans text-gray-800 antialiased bg-gray-50">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-40 bg-gray-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
+                    <div class="bg-blue-600 text-white font-extrabold p-2 rounded-lg text-xl tracking-wider shadow-lg">
+                        S
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-widest uppercase text-white">SHADOW</span>
+                        <span class="text-xs block text-blue-400 font-medium tracking-wider">PREMIUM FASHION</span>
+                    </div>
+                </div>
+
+                <!-- Search & Filters (Desktop) -->
+                <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <input type="text" id="searchInput" oninput="renderProducts()" placeholder="Cari baju, merk, spesifikasi..." class="w-full bg-gray-800 text-white pl-10 pr-4 py-2 rounded-full border border-gray-700 focus:outline-none focus:border-blue-500 text-sm">
+                        <i class="fas font-thin fa-search absolute left-3.5 top-2.5 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <!-- Navigation Links & Admin Button -->
+                <div class="flex items-center space-x-4">
+                    <button onclick="openModal('adminModal')" class="bg-gray-800 hover:bg-gray-700 text-blue-400 hover:text-blue-300 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition border border-gray-700 flex items-center gap-1.5">
+                        <i class="fas fa-plus-circle"></i>
+                        <span class="hidden sm:inline">Tambah</span> Stok
+                    </button>
+                    
+                    <!-- Quick Contact Menu -->
+                    <div class="flex items-center space-x-2 border-l border-gray-700 pl-4">
+                        <a href="https://wa.me/6285861437850" target="_blank" class="text-green-400 hover:text-green-300 text-xl p-1" title="WhatsApp: 085861437850">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://instagram.com/m.fazrii14" target="_blank" class="text-pink-400 hover:text-pink-300 text-xl p-1" title="Instagram: @m.fazrii14">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="pb-3 md:hidden">
+                <div class="relative w-full">
+                    <input type="text" id="searchInputMobile" oninput="syncAndSearch(this.value)" placeholder="Cari pakaian, merk..." class="w-full bg-gray-800 text-white pl-10 pr-4 py-2 rounded-full border border-gray-700 focus:outline-none focus:border-blue-500 text-sm">
+                    <i class="fas fa-search absolute left-3.5 top-2.5 text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+
+        <!-- Announcement / Info Banner -->
+        <div class="bg-gradient-to-r from-blue-900 via-gray-900 to-indigo-950 text-white rounded-2xl p-6 shadow-xl relative overflow-hidden border border-gray-800">
+            <div class="relative z-10 max-w-2xl">
+                <span class="bg-blue-600 text-xs font-extrabold uppercase px-3 py-1 rounded-full tracking-wider mb-3 inline-block">Official Store</span>
+                <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2">Tampil Gaya Bersama <span class="text-blue-400">SHADOW</span></h1>
+                <p class="text-gray-300 text-xs sm:text-sm mb-4">Melayani Pembelian Eceran & Grosir (Pria, Wanita, Anak, Dewasa). Nikmati Kemudahan Pembayaran COD, QRIS, Bank & E-Wallet.</p>
+                <div class="flex flex-wrap gap-2 text-xs font-medium">
+                    <span class="bg-gray-800/80 border border-gray-700 px-2.5 py-1 rounded-md text-green-400"><i class="fas fa-truck mr-1"></i>Bisa COD</span>
+                    <span class="bg-gray-800/80 border border-gray-700 px-2.5 py-1 rounded-md text-yellow-400"><i class="fas fa-credit-card mr-1"></i>Bisa Angsuran</span>
+                    <span class="bg-gray-800/80 border border-gray-700 px-2.5 py-1 rounded-md text-blue-300"><i class="fas fa-qrcode mr-1"></i>QRIS All Payment</span>
+                </div>
+            </div>
+            <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-1/4 translate-y-1/4">
+                <i class="fas fa-tshirt text-[240px]"></i>
+            </div>
+        </div>
+
+        <!-- ETALASE UTAMA PROMO (PALING ATAS-DEPAN) -->
+        <section id="promoSection" class="space-y-4">
+            <div class="flex items-center justify-between border-b border-red-200 pb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="flex h-3 w-3 relative">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                    </span>
+                    <h2 class="text-xl sm:text-2xl font-black text-gray-900 tracking-tight uppercase">PROMO SPESIAL HARI INI</h2>
+                </div>
+                <span class="text-xs font-semibold text-red-600 bg-red-100 px-3 py-1 rounded-full">Diskon Potongan Harga!</span>
+            </div>
+
+            <!-- Grid Promo -->
+            <div id="promoGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Dynamic Content via JS -->
+            </div>
+        </section>
+
+        <!-- Kategori & Filter Navigation -->
+        <section class="space-y-4 pt-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4 border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900">Katalog Produk</h2>
+                
+                <!-- Category Buttons -->
+                <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-1">
+                    <button onclick="setCategory('all')" id="cat-all" class="cat-btn bg-gray-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition shadow-sm">Semua</button>
+                    <button onclick="setCategory('Pria')" id="cat-Pria" class="cat-btn bg-gray-200 text-gray-700 hover:bg-gray-300 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition">Pria</button>
+                    <button onclick="setCategory('Wanita')" id="cat-Wanita" class="cat-btn bg-gray-200 text-gray-700 hover:bg-gray-300 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition">Wanita</button>
+                    <button onclick="setCategory('Anak')" id="cat-Anak" class="cat-btn bg-gray-200 text-gray-700 hover:bg-gray-300 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition">Anak-Anak</button>
+                    <button onclick="setCategory('Dewasa')" id="cat-Dewasa" class="cat-btn bg-gray-200 text-gray-700 hover:bg-gray-300 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition">Dewasa</button>
+                </div>
+            </div>
+
+            <!-- Main Product Grid -->
+            <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Dynamic Content via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-12 bg-white rounded-2xl shadow-sm border border-gray-100">
+                <i class="fas fa-box-open text-5xl text-gray-300 mb-3"></i>
+                <p class="text-gray-500 font-medium text-sm">Produk tidak ditemukan atau stok sedang habis.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Information -->
+    <footer class="bg-gray-900 text-gray-400 mt-12 border-t border-gray-800 text-xs sm:text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Brand Info -->
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2">
+                    <div class="bg-blue-600 text-white font-black px-2 py-1 rounded text-lg">S</div>
+                    <span class="text-xl font-black text-white tracking-widest">SHADOW</span>
+                </div>
+                <p class="text-gray-400 leading-relaxed">Pusat busana berkualitas tinggi untuk Pria, Wanita, dan Anak-Anak. Mengutamakan kenyamanan, tren terkini, dan harga terbaik.</p>
+            </div>
+
+            <!-- Payment Methods Supported -->
+            <div class="space-y-3">
+                <h3 class="text-white font-bold text-sm uppercase tracking-wider">Metode Pembayaran Supported</h3>
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">COD (Bayar di Tempat)</span>
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">Cash / Tunai</span>
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">Angsuran / Cicilan</span>
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">QRIS</span>
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">Bank BRI</span>
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">Bank BCA</span>
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">Bank BSI</span>
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">DANA</span>
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">OVO</span>
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">GoPay</span>
+                    <span class="bg-gray-800 text-gray-300 px-2.5 py-1 rounded border border-gray-700">ShopeePay</span>
+                </div>
+            </div>
+
+            <!-- Official Contacts -->
+            <div class="space-y-3">
+                <h3 class="text-white font-bold text-sm uppercase tracking-wider">Kontak & Pemesanan Official</h3>
+                <ul class="space-y-2">
+                    <li class="flex items-center space-x-3">
+                        <i class="fab fa-whatsapp text-green-500 text-lg"></i>
+                        <a href="https://wa.me/6285861437850" target="_blank" class="hover:text-white transition">085861437850 (WhatsApp Fast Response)</a>
+                    </li>
+                    <li class="flex items-center space-x-3">
+                        <i class="fab fa-instagram text-pink-500 text-lg"></i>
+                        <a href="https://instagram.com/m.fazrii14" target="_blank" class="hover:text-white transition">@m.fazrii14 (Instagram Official)</a>
+                    </li>
+                    <li class="flex items-center space-x-3">
+                        <i class="fas fa-store text-blue-400 text-lg"></i>
+                        <span>Toko SHADOW Official Store</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="bg-gray-950 py-4 text-center text-xs text-gray-600 border-t border-gray-900">
+            &copy; 2026 Toko Baju SHADOW. All Rights Reserved. Powered by Fazri.
+        </div>
+    </footer>
+
+    <!-- MODAL DETAIL & ORDER PRODUK -->
+    <div id="productModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl transition-all my-8">
+            <div class="relative bg-gray-900 text-white p-4 flex justify-between items-center">
+                <h3 id="modalTitle" class="text-lg font-bold">Detail Produk</h3>
+                <button onclick="closeModal('productModal')" class="text-gray-400 hover:text-white text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 max-h-[80vh] overflow-y-auto space-y-6">
+                <!-- Layout Atas: Gambar + Spesifikasi Singkat -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="relative rounded-xl overflow-hidden bg-gray-100 aspect-square">
+                        <img id="modalImage" src="" alt="" class="w-full h-full object-cover">
+                        <span id="modalBadge" class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded-full hidden">PROMO</span>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <span id="modalCategory" class="text-xs font-bold text-blue-600 uppercase tracking-wider">Kategori</span>
+                            <h2 id="modalName" class="text-xl font-black text-gray-900 leading-tight">Nama Produk</h2>
+                            <p id="modalBrand" class="text-xs text-gray-500 font-semibold mt-1">Merk: -</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                            <span class="text-xs text-gray-400 block font-medium">Harga Produk:</span>
+                            <div class="flex items-baseline space-x-2">
+                                <span id="modalPrice" class="text-2xl font-extrabold text-blue-600">Rp 0</span>
+                                <span id="modalOldPrice" class="text-xs text-gray-400 line-through hidden">Rp 0</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="text-xs font-bold text-gray-700 block mb-1">Ukuran Tersedia:</span>
+                            <div id="modalSizes" class="flex flex-wrap gap-1.5">
+                                <!-- Sizes inserted dynamically -->
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="text-xs font-bold text-gray-700 block mb-1">Sisa Stok:</span>
+                            <span id="modalStock" class="text-sm font-semibold text-gray-900">0 Pcs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spesifikasi Detail -->
+                <div class="border-t border-gray-200 pt-4">
+                    <h4 class="text-sm font-bold text-gray-900 mb-2">Spesifikasi & Bahan:</h4>
+                    <p id="modalSpec" class="text-xs text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        -
+                    </p>
+                </div>
+
+                <!-- FORM PEMESANAN DIRECT -->
+                <div class="border-t border-gray-200 pt-4 space-y-4">
+                    <h4 class="text-sm font-bold text-gray-900">Form Pemesanan Cepat:</h4>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Nama Pembeli *</label>
+                            <input type="text" id="orderName" placeholder="Masukkan nama Anda" class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Pilih Ukuran *</label>
+                            <select id="orderSize" class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                                <!-- Options dynamically updated -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Jumlah Pasang/Pcs *</label>
+                            <input type="number" id="orderQty" value="1" min="1" class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Metode Pembayaran *</label>
+                            <select id="orderPayment" class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option value="COD (Bayar di Tempat)">COD (Bayar di Tempat)</option>
+                                <option value="Cash / Tunai">Cash / Tunai Direct</option>
+                                <option value="Angsuran / Cicilan">Angsuran / Cicilan Toko</option>
+                                <option value="QRIS (All E-Wallet & Bank)">QRIS (All Payment)</option>
+                                <option value="Transfer Bank BRI">Transfer Bank BRI</option>
+                                <option value="Transfer Bank BCA">Transfer Bank BCA</option>
+                                <option value="Transfer Bank BSI">Transfer Bank BSI</option>
+                                <option value="E-Wallet DANA">E-Wallet DANA</option>
+                                <option value="E-Wallet OVO">E-Wallet OVO</option>
+                                <option value="E-Wallet GoPay">E-Wallet GoPay</option>
+                                <option value="E-Wallet ShopeePay">E-Wallet ShopeePay</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Alamat Lengkap *</label>
+                        <textarea id="orderAddress" rows="2" placeholder="Jalan, RT/RW, Kecamatan, Kota" class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                    </div>
+
+                    <!-- CTA Order Buttons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <button onclick="submitOrder('wa')" class="bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition">
+                            <i class="fab fa-whatsapp text-lg"></i>
+                            Order via WhatsApp (Fast)
+                        </button>
+                        <button onclick="submitOrder('ig')" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-95 text-white py-3 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition">
+                            <i class="fab fa-instagram text-lg"></i>
+                            Order via IG (@m.fazrii14)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL INPUT STOK BARU (ADMIN MENU) -->
+    <div id="adminModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl transition-all my-8">
+            <div class="bg-gray-900 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-boxes text-blue-400"></i>
+                    <h3 class="text-base font-bold">Input Stok Baju Baru</h3>
+                </div>
+                <button onclick="closeModal('adminModal')" class="text-gray-400 hover:text-white text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="addStockForm" onsubmit="handleAddNewStock(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">Nama Baju / Pakaian *</label>
+                    <input type="text" id="newTitle" required placeholder="Contoh: Kaos Oversize Premium" class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Kategori Target *</label>
+                        <select id="newCategory" required class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="Pria">Pria</option>
+                            <option value="Wanita">Wanita</option>
+                            <option value="Anak">Anak</option>
+                            <option value="Dewasa">Dewasa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Merk / Brand *</label>
+                        <input type="text" id="newBrand" required placeholder="Contoh: SHADOW Co" class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Harga Normal (Rp) *</label>
+                        <input type="number" id="newPrice" required placeholder="120000" class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Jumlah Stok (Pcs) *</label>
+                        <input type="number" id="newStock" required min="1" placeholder="50" class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Pilihan Ukuran (Pisahkan Koma)</label>
+                        <input type="text" id="newSizes" placeholder="S, M, L, XL, XXL" class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div class="flex items-center pt-5">
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="isPromo" class="sr-only peer">
+                            <div class="w-9 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600"></div>
+                            <span class="ml-2 text-xs font-bold text-gray-700">Tampilkan di Promo Hot?</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="promoPriceContainer" class="hidden">
+                    <label class="block text-xs font-semibold text-red-600 mb-1">Harga Coret / Promo (Rp)</label>
+                    <input type="number" id="newOldPrice" placeholder="150000" class="w-full text-xs p-2.5 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">URL Foto Produk</label>
+                    <input type="url" id="newImage" placeholder="https://images.unsplash.com/..." class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    <span class="text-[10px] text-gray-400">*Kosongkan jika ingin menggunakan gambar sampel otomatis</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">Spesifikasi Detail & Bahan *</label>
+                    <textarea id="newSpec" required rows="3" placeholder="Bahan Cotton Combed 30s, Jahitan Rantai, Adem dan Menyerap Keringat..." class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2 border-t">
+                    <button type="button" onclick="closeModal('adminModal')" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-lg transition">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition shadow">Simpan Stok Baru</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-2xl z-50 hidden flex items-center space-x-3 text-xs border border-gray-700">
+        <i class="fas fa-info-circle text-blue-400 text-base"></i>
+        <span id="toastMessage">Pesan Notifikasi</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Database Produk Bawaan Awal (Default Initial Data)
+        const initialProducts = [
+            {
+                id: 1,
+                name: "Jaket Bomber Exclusive Shadow",
+                category: "Pria",
+                brand: "SHADOW Official",
+                price: 185000,
+                oldPrice: 250000,
+                sizes: ["M", "L", "XL", "XXL"],
+                stock: 15,
+                isPromo: true,
+                image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&auto=format&fit=crop&q=80",
+                spec: "Bahan Waterproof Parasut Premium, Furing Quilting Tebal, Zipper YKK Anti Macet, Saku Dalam Praktis."
+            },
+            {
+                id: 2,
+                name: "Gaun Casual Floral Summer",
+                category: "Wanita",
+                brand: "Shadow Woman",
+                price: 135000,
+                oldPrice: 190000,
+                sizes: ["S", "M", "L"],
+                stock: 8,
+                isPromo: true,
+                image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=500&auto=format&fit=crop&q=80",
+                spec: "Bahan Rayon Viscose High Grade, Lembut & Adem, Fitur Karet Pinggang Elastis, Motif Printing Awet."
+            },
+            {
+                id: 3,
+                name: "Setelan Baju Anak Superhero Kids",
+                category: "Anak",
+                brand: "Shadow Kids",
+                price: 75000,
+                oldPrice: 110000,
+                sizes: ["S (2-3 thn)", "M (4-5 thn)", "L (6-7 thn)"],
+                stock: 25,
+                isPromo: true,
+                image: "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500&auto=format&fit=crop&q=80",
+                spec: "Bahan Cotton Combed 24s 100% Organik, Aman Untuk Kulit Sensitif Anak, Menyerap Keringat Cepat."
+            },
+            {
+                id: 4,
+                name: "Kemeja Polos Basic Formal Dewasa",
+                category: "Dewasa",
+                brand: "SHADOW Executive",
+                price: 120000,
+                oldPrice: 0,
+                sizes: ["M", "L", "XL"],
+                stock: 30,
+                isPromo: false,
+                image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&auto=format&fit=crop&q=80",
+                spec: "Bahan Katun Poplin Premium, Jahitan Presisi Standar Ekspor, Kerah Kaku & Rapi, Cocok Kerja/Formal."
+            },
+            {
+                id: 5,
+                name: "Hoodie Polos Streetwear Oversize",
+                category: "Pria",
+                brand: "SHADOW Co",
+                price: 160000,
+                oldPrice: 0,
+                sizes: ["L", "XL"],
+                stock: 12,
+                isPromo: false,
+                image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=500&auto=format&fit=crop&q=80",
+                spec: "Bahan Cotton Fleece 300 Gsm Tebal & Halus, Tali Topi Bulat Tipis Premium, Saku Kanguru Depan."
+            },
+            {
+                id: 6,
+                name: "Blouse Modern Elegance",
+                category: "Wanita",
+                brand: "Shadow Woman",
+                price: 115000,
+                oldPrice: 150000,
+                sizes: ["M", "L"],
+                stock: 18,
+                isPromo: true,
+                image: "https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?w=500&auto=format&fit=crop&q=80",
+                spec: "Bahan Satin Silk Premium, Berkilau Elegan, Tidak Menerawang, Lengan Wudhu Friendly."
+            }
+        ];
+
+        // State Management LocalStorage
+        let products = JSON.parse(localStorage.getItem('shadow_products')) || initialProducts;
+        let selectedCategory = 'all';
+        let selectedProductForOrder = null;
+
+        // Toggle visibility promo price on admin form
+        document.getElementById('isPromo').addEventListener('change', function(e) {
+            const container = document.getElementById('promoPriceContainer');
+            if (e.target.checked) {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+        });
+
+        // Initialize App
+        window.onload = function() {
+            renderProducts();
+        };
+
+        // Render Product Cards
+        function renderProducts() {
+            const promoGrid = document.getElementById('promoGrid');
+            const productGrid = document.getElementById('productGrid');
+            const emptyState = document.getElementById('emptyState');
+            const searchQuery = (document.getElementById('searchInput').value || document.getElementById('searchInputMobile').value || '').toLowerCase();
+
+            promoGrid.innerHTML = '';
+            productGrid.innerHTML = '';
+
+            // Filter logic
+            const filteredProducts = products.filter(p => {
+                const matchCategory = (selectedCategory === 'all') || (p.category === selectedCategory);
+                const matchSearch = p.name.toLowerCase().includes(searchQuery) ||
+                                    p.brand.toLowerCase().includes(searchQuery) ||
+                                    p.spec.toLowerCase().includes(searchQuery);
+                return matchCategory && matchSearch;
+            });
+
+            // Promos (Filtered)
+            const promoProducts = filteredProducts.filter(p => p.isPromo);
+
+            // Hide/Show Promo section if empty
+            const promoSection = document.getElementById('promoSection');
+            if (promoProducts.length === 0) {
+                promoSection.classList.add('hidden');
+            } else {
+                promoSection.classList.remove('hidden');
+                promoProducts.forEach(product => {
+                    promoGrid.appendChild(createProductCard(product, true));
+                });
+            }
+
+            // Normal Catalogue
+            if (filteredProducts.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                filteredProducts.forEach(product => {
+                    productGrid.appendChild(createProductCard(product, false));
+                });
+            }
+        }
+
+        // Card HTML Template Creator
+        function createProductCard(product, isPromoCard) {
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden flex flex-col justify-between transition-all duration-300 group";
+
+            const formattedPrice = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.price);
+            const formattedOldPrice = product.oldPrice ? new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.oldPrice) : '';
+
+            card.innerHTML = `
+                <div>
+                    <div class="relative aspect-square overflow-hidden bg-gray-100">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://placehold.co/400x400/1e293b/ffffff?text=Baju+Shadow'" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        ${product.isPromo ? `<span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-md">HOT PROMO</span>` : ''}
+                        <span class="absolute bottom-2 right-2 bg-gray-900/80 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded font-medium">${product.category}</span>
+                    </div>
+
+                    <div class="p-3.5 space-y-2">
+                        <div>
+                            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider block">${product.brand}</span>
+                            <h3 class="font-bold text-gray-900 text-xs sm:text-sm line-clamp-1 group-hover:text-blue-600 transition" title="${product.name}">${product.name}</h3>
+                        </div>
+
+                        <div class="flex items-baseline space-x-1.5">
+                            <span class="text-sm sm:text-base font-extrabold text-blue-600">${formattedPrice}</span>
+                            ${product.oldPrice ? `<span class="text-[10px] sm:text-xs text-gray-400 line-through">${formattedOldPrice}</span>` : ''}
+                        </div>
+
+                        <div class="text-[11px] text-gray-500 space-y-1">
+                            <div class="flex justify-between">
+                                <span>Ukuran:</span>
+                                <span class="font-semibold text-gray-700">${product.sizes.join(', ')}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Sisa Stok:</span>
+                                <span class="font-semibold ${product.stock < 5 ? 'text-red-500 font-bold' : 'text-gray-700'}">${product.stock} pcs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3.5 pt-0">
+                    <button onclick="openDetailModal(${product.id})" class="w-full bg-gray-900 hover:bg-blue-600 text-white text-xs font-semibold py-2 px-3 rounded-lg transition duration-200 flex items-center justify-center gap-1.5 shadow">
+                        <i class="fas fa-shopping-bag"></i> Detail & Order
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        // Category Filter Function
+        function setCategory(cat) {
+            selectedCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn bg-gray-200 text-gray-700 hover:bg-gray-300 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition";
+            });
+            const activeBtn = document.getElementById(`cat-${cat}`);
+            if (activeBtn) {
+                activeBtn.className = "cat-btn bg-gray-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition shadow-sm";
+            }
+            renderProducts();
+        }
+
+        // Sync Search bar input
+        function syncAndSearch(val) {
+            document.getElementById('searchInput').value = val;
+            renderProducts();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchInputMobile').value = '';
+            setCategory('all');
+        }
+
+        // Open Detail & Order Modal
+        function openDetailModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            selectedProductForOrder = product;
+
+            document.getElementById('modalTitle').innerText = product.name;
+            document.getElementById('modalName').innerText = product.name;
+            document.getElementById('modalBrand').innerText = `Merk/Brand: ${product.brand}`;
+            document.getElementById('modalCategory').innerText = `Kategori ${product.category}`;
+            document.getElementById('modalImage').src = product.image;
+            document.getElementById('modalSpec').innerText = product.spec;
+            document.getElementById('modalStock').innerText = `${product.stock} Pcs`;
+            
+            // Prices
+            document.getElementById('modalPrice').innerText = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.price);
+            
+            const oldPriceEl = document.getElementById('modalOldPrice');
+            if (product.oldPrice) {
+                oldPriceEl.innerText = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.oldPrice);
+                oldPriceEl.classList.remove('hidden');
+            } else {
+                oldPriceEl.classList.add('hidden');
+            }
+
+            // Promo Badge
+            const badgeEl = document.getElementById('modalBadge');
+            if (product.isPromo) {
+                badgeEl.classList.remove('hidden');
+            } else {
+                badgeEl.classList.add('hidden');
+            }
+
+            // Sizes Display & Select Options
+            const sizesContainer = document.getElementById('modalSizes');
+            const sizeSelect = document.getElementById('orderSize');
+            sizesContainer.innerHTML = '';
+            sizeSelect.innerHTML = '';
+
+            product.sizes.forEach(size => {
+                sizesContainer.innerHTML += `<span class="bg-gray-100 text-gray-800 text-[11px] font-bold px-2.5 py-1 rounded border border-gray-200">${size}</span>`;
+                sizeSelect.innerHTML += `<option value="${size}">${size}</option>`;
+            });
+
+            openModal('productModal');
+        }
+
+        // Submit Order to WA or IG
+        function submitOrder(platform) {
+            if (!selectedProductForOrder) return;
+
+            const name = document.getElementById('orderName').value.trim();
+            const size = document.getElementById('orderSize').value;
+            const qty = document.getElementById('orderQty').value;
+            const payment = document.getElementById('orderPayment').value;
+            const address = document.getElementById('orderAddress').value.trim();
+
+            if (!name || !address) {
+                showToast("Mohon lengkapi Nama dan Alamat Pemesan!");
+                return;
+            }
+
+            const totalPrice = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(selectedProductForOrder.price * qty);
+
+            // Format Pesanan
+            const textMessage = `Halo Toko SHADOW, Saya mau order via Website:%0A%0A` +
+                `*Detail Pesanan:*%0A` +
+                `- Produk: ${selectedProductForOrder.name}%0A` +
+                `- Merk: ${selectedProductForOrder.brand}%0A` +
+                `- Ukuran: ${size}%0A` +
+                `- Jumlah: ${qty} pcs%0A` +
+                `- Total Harga: ${totalPrice}%0A%0A` +
+                `*Data Pembeli:*%0A` +
+                `- Nama: ${name}%0A` +
+                `- Metode Pembayaran: ${payment}%0A` +
+                `- Alamat Lengkap: ${address}%0A%0A` +
+                `Mohon segera diproses ya, terima kasih!`;
+
+            if (platform === 'wa') {
+                const waUrl = `https://wa.me/6285861437850?text=${textMessage}`;
+                window.open(waUrl, '_blank');
+            } else if (platform === 'ig') {
+                // WhatsApp fallback/alert for IG direct since IG DM web link deep query isn't standardized
+                const igUrl = `https://instagram.com/m.fazrii14`;
+                navigator.clipboard ? navigator.clipboard.writeText(decodeURIComponent(textMessage)) : null;
+                alert("Format rincian pesanan telah disalin ke clipboard! Silahkan paste / tempel di DM Instagram @m.fazrii14");
+                window.open(igUrl, '_blank');
+            }
+
+            closeModal('productModal');
+            showToast("Mengarahkan ke layanan pemesanan...");
+        }
+
+        // Handle Form Input Stok Baru (Admin)
+        function handleAddNewStock(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('newTitle').value.trim();
+            const category = document.getElementById('newCategory').value;
+            const brand = document.getElementById('newBrand').value.trim();
+            const price = parseFloat(document.getElementById('newPrice').value);
+            const stock = parseInt(document.getElementById('newStock').value);
+            const rawSizes = document.getElementById('newSizes').value.trim();
+            const isPromo = document.getElementById('isPromo').checked;
+            const oldPrice = isPromo ? parseFloat(document.getElementById('newOldPrice').value || 0) : 0;
+            const imageInput = document.getElementById('newImage').value.trim();
+            const spec = document.getElementById('newSpec').value.trim();
+
+            const sizesArr = rawSizes ? rawSizes.split(',').map(s => s.trim()) : ["All Size"];
+            const defaultImg = "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=500&auto=format&fit=crop&q=80";
+
+            const newProduct = {
+                id: Date.now(),
+                name: title,
+                category: category,
+                brand: brand,
+                price: price,
+                oldPrice: oldPrice,
+                sizes: sizesArr,
+                stock: stock,
+                isPromo: isPromo,
+                image: imageInput || defaultImg,
+                spec: spec
+            };
+
+            // Simpan ke array & localStorage
+            products.unshift(newProduct);
+            localStorage.setItem('shadow_products', JSON.stringify(products));
+
+            // Reset form & UI
+            document.getElementById('addStockForm').reset();
+            document.getElementById('promoPriceContainer').classList.add('hidden');
+            closeModal('adminModal');
+            renderProducts();
+
+            showToast("Stok pakaian baru berhasil ditambahkan ke katalog!");
+        }
+
+        // Helper UI Modal Controls
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        // Helper Toast Notification
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
